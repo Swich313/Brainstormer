@@ -12,9 +12,12 @@ app.get('/ping', (req, res) => {
   res.json('pong')
 })
 
-app.use('/trpc', trpcExpress.createExpressMiddleware({
-  router: trpcRouter,
-}))
+app.use(
+  '/trpc',
+  trpcExpress.createExpressMiddleware({
+    router: trpcRouter,
+  }),
+)
 
 app.listen(port, () => {
   console.info(`Example app listening on port http://localhost:${port}`)
