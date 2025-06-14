@@ -1,5 +1,5 @@
 {
-  "name": "webapp",
+  "name": "@brainstormer/webapp",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,11 +8,17 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "types": "tsc --noEmit --project ./tsconfig.app.json && tsc --noEmit --project ./tsconfig.node.json",
     "prettify": "prettier --log-level warn --cache --write '{src/**/*,*}.{ts,tsx,js,json,yml,scss}' '!**/{node_modules,dist}/**/*'"
   },
   "dependencies": {
+    "@brainstormer/backend": "workspace:*",
+    "@tanstack/react-query": "^5.80.7",
+    "@trpc/client": "^11.4.1",
+    "@trpc/react-query": "^11.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
