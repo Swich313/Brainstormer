@@ -1,6 +1,6 @@
-@use '../../styles/_vars.scss' as *;
-@use '../../styles/_mixins.scss' as *;
-@use '../../../node_modules/include-media/dist/_include-media.scss' as *;
+@use '../../styles/vars' as *;
+@use '../../styles/mixins' as *;
+@use '../../../node_modules/include-media/dist/include-media' as *;
 
 $breakpoint: '<=900px';
 

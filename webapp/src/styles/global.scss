@@ -1,5 +1,5 @@
-@use '../../node_modules/reset-css/sass//reset.scss';
-@use './vars.scss' as *;
+@use '../../node_modules/reset-css/sass/reset';
+@use './vars' as *;
 
 html,
 body,
@@ -19,8 +19,8 @@ body {
 }
 
 *,
-*::before,
-*::after {
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
