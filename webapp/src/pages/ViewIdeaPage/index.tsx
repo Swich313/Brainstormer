@@ -6,8 +6,8 @@ import { Segment } from '../../components/Segment'
 import styles from './index.module.scss'
 
 export const ViewIdeaPage = () => {
-  const { id } = useParams() as ViewIdeaRouteParams
-  const { data, error, isLoading, isFetching, isError } = trpc.getIdea.useQuery({ id })
+  const { nick } = useParams() as ViewIdeaRouteParams
+  const { data, error, isLoading, isFetching, isError } = trpc.getIdea.useQuery({ nick })
 
   if (isLoading || isFetching) {
     return <div>Loading...</div>

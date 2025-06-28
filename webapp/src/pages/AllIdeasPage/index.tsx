@@ -20,10 +20,10 @@ export const AllIdeasPage = () => {
     <Segment title="All ideas">
       <div className={styles.ideas}>
         {data?.ideas.map((idea) => (
-          <div className={styles.idea} key={idea.id}>
+          <div className={styles.idea} key={idea.nick}>
             <Segment
               title={
-                <Link className={styles.ideaLink} to={getViewIdeaRoute({ id: idea.id })}>
+                <Link className={styles.ideaLink} to={getViewIdeaRoute({ nick: idea.nick })}>
                   {idea.name}
                 </Link>
               }

@@ -6,10 +6,10 @@ import { trpc } from '../../lib/trpc'
 export const getIdeaTrpcRoute = trpc.procedure
   .input(
     z.object({
-      id: z.string(),
+      nick: z.string(),
     }),
   )
   .query(({ input }) => {
-    const idea = ideas.find((idea) => idea.id === input.id)
+    const idea = ideas.find((idea) => idea.nick === input.nick)
     return { idea: idea || null }
   })
