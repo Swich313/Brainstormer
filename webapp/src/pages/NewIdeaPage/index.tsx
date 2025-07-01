@@ -3,10 +3,18 @@ import { Input } from '../../components/Input'
 import { Textarea } from '../../components/Textarea'
 import { useFormik } from 'formik'
 import { withZodSchema } from 'formik-validator-zod'
-import { z } from 'zod'
 import { trpc } from '../../lib/trpc'
+import { zCreateIdeaTrpcInput } from '@brainstormer/backend/src/router/createIdea/input'
+import { useState } from 'react'
+
+import { Alert } from '../../components/Alert'
+import { Button } from '../../components/Button'
+import { FormItems } from '../../components/FormItems'
 
 export const NewIdeaPage = () => {
+  const [successMessageVisible, setSuccessMessageVisible] = useState(false)
+  const [submittingError, setSubmittingError] = useState<string | null>(null)
+
   const createIdea = trpc.createIdea.useMutation()
   const formik = useFormik({
     initialValues: {
@@ -15,43 +23,24 @@ export const NewIdeaPage = () => {
       description: '',
       text: '',
     },
-    validate: withZodSchema(
-      z.object({
-        name: z.string().min(1, 'Name is Required!'),
-        nick: z
-          .string()
-          .min(1, 'Nickname is Required!')
-          .regex(/^[a-zA-Z0-9-]+$/, 'Nickname can only contain letters, numbers, and dashes!'),
-        description: z.string().min(1, 'Description is Required!'),
-        text: z.string().min(100, 'Text must be at least 100 characters long!'),
-      }),
-    ),
-    // Uncomment the following lines to use the Formik validation function instead of zod
-    // validate: (values) => {
-    //   const errors: Partial<typeof values> = {}
-    //   if (!values.name) {
-    //     errors.name = 'Name is Required!'
-    //   }
-    //   if (!values.nick) {
-    //     errors.nick = 'Nickname is Required!'
-    //   } else if(!values.nick.match(/^[a-zA-Z0-9-]+$/)) {
-    //     errors.nick = 'Nickname can only contain letters, numbers, and dashes!'
-    //   }
-    //   if (!values.description) {
-    //     errors.description = 'Description is Required!'
-    //   }
-    //   if (!values.text) {
-    //     errors.text = 'Text is Required!'
-    //   } else if (values.text.length < 10) {
-    //     errors.text = 'Text must be at least 100 characters long!'
-    //   }
-    //   return errors
-    // },
+    validate: withZodSchema(zCreateIdeaTrpcInput),
     onSubmit: async (values) => {
-      createIdea.mutateAsync(values)
+      try {
+        await createIdea.mutateAsync(values)
+        formik.resetForm()
+        setSuccessMessageVisible(true)
+        setTimeout(() => {
+          setSuccessMessageVisible(false)
+        }, 3000)
+      } catch (error: any) {
+        setSubmittingError(error.message)
+        setTimeout(() => {
+          setSubmittingError(null)
+        }, 3000)
+      }
     },
   })
-
+  console.log({ isSub: formik.isSubmitting })
   return (
     <Segment title="New Idea">
       <form
@@ -60,12 +49,16 @@ export const NewIdeaPage = () => {
           formik.handleSubmit()
         }}
       >
-        <Input name="name" label="Name" formik={formik} />
-        <Input name="nick" label="Nick" formik={formik} />
-        <Input name="description" label="Description" formik={formik} />
-        <Textarea name="text" label="Text" formik={formik} />
-        {!formik.isValid && !!formik.submitCount && <div style={{ color: 'red' }}>Some fields are invalid</div>}
-        <button type="submit">Create Idea</button>
+        <FormItems>
+          <Input name="name" label="Name" formik={formik} />
+          <Input name="nick" label="Nick" formik={formik} />
+          <Input name="description" label="Description" formik={formik} maxWidth={500} />
+          <Textarea name="text" label="Text" formik={formik} />
+          {!formik.isValid && !!formik.submitCount && <div style={{ color: 'red' }}>Some fields are invalid</div>}
+          {!!submittingError && <Alert color="red">{submittingError}</Alert>}
+          {successMessageVisible && <Alert color="green">Idea has been created successfully!</Alert>}
+          <Button loading={formik.isSubmitting}>Create Idea</Button>
+        </FormItems>
       </form>
     </Segment>
   )
