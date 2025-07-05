@@ -40,7 +40,6 @@ export const NewIdeaPage = () => {
       }
     },
   })
-  console.log({ isSub: formik.isSubmitting })
   return (
     <Segment title="New Idea">
       <form
