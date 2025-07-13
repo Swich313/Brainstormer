@@ -8,11 +8,13 @@ export const Input = ({
   label,
   formik,
   maxWidth,
+  type = 'text',
 }: {
   name: string
   label: string
   formik: FormikProps<any>
   maxWidth?: number
+  type?: 'text' | 'password'
 }) => {
   const value = formik.values[name]
   const error = formik.errors[name] as string | undefined
@@ -26,7 +28,7 @@ export const Input = ({
         {label}
       </label>
       <input
-        type="text"
+        type={type}
         className={cn({ [styles.input]: true, [styles.invalid]: invalid })}
         style={{ maxWidth }}
         onChange={(e) => {

@@ -22,7 +22,7 @@ void (async () => {
       res.json('pong')
     })
 
-    applyTrpcToExpressApp(app, ctx, trpcRouter)
+    await applyTrpcToExpressApp(app, ctx, trpcRouter)
 
     app.listen(port, () => {
       console.info(`Example app listening on port http://localhost:${port}`)

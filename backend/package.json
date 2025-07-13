@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "lodash": "^4.17.21",
+    "trpc-playground": "^1.0.4",
     "zod": "^3.25.67"
   },
   "devDependencies": {

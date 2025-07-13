@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { trpc } from '../../lib/trpc'
 
 export const getIdeaTrpcRoute = trpc.procedure
+  .meta({ description: 'Get a signle Idea' })
   .input(
     z.object({
       nick: z.string(),
