@@ -1,5 +1,6 @@
 import { trpc } from '../../lib/trpc'
 import { getPasswordHash } from '../../utils/getPasswordHash'
+import { signJWT } from '../../utils/signJWT'
 import { zLoginTrpcInput } from './input'
 
 export const loginTrpcRoute = trpc.procedure
@@ -16,6 +17,6 @@ export const loginTrpcRoute = trpc.procedure
     if (!user) {
       throw Error('Invalid credentials!')
     }
-
-    return true
+    const token = signJWT(user.id)
+    return { token }
   })

@@ -6,6 +6,8 @@ import * as routes from './lib/routes'
 import { Layout } from './components/Layout'
 import { NewIdeaPage } from './pages/NewIdeaPage'
 import { SignUpPage } from './pages/SignUpPage'
+import { LoginPage } from './pages/LoginPage'
+import { LogoutPage } from './pages/LogoutPage'
 
 import './styles/global.scss'
 
@@ -14,8 +16,11 @@ export const App = () => {
     <TrpcProvider>
       <BrowserRouter>
         <Routes>
+          <Route path={routes.getLogoutRoute()} element={<LogoutPage />} />
+
           <Route element={<Layout />}>
             <Route path={routes.getSignupRoute()} element={<SignUpPage />} />
+            <Route path={routes.getLoginRoute()} element={<LoginPage />} />
             <Route path={routes.getAllIdeasRoute()} element={<AllIdeasPage />} />
             <Route path={routes.getViewIdeaRoute(routes.viewIdeaRouteParams)} element={<ViewIdeaPage />} />
             <Route path={routes.getNewIdeaRoute()} element={<NewIdeaPage />} />

@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { trpc } from '../../lib/trpc'
 import { useFormik } from 'formik'
 import { withZodSchema } from 'formik-validator-zod'
-import { zSignUpTrpcInput } from '@brainstormer/backend/src/router/signUp/input'
-import { z } from 'zod'
+import { zLoginTrpcInput } from '@brainstormer/backend/src/router/login/input'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router'
 
@@ -12,37 +11,26 @@ import { Segment } from '../../components/Segment'
 import { Input } from '../../components/Input'
 import { FormItems } from '../../components/FormItems'
 import { Button } from '../../components/Button'
-import { getLoginRoute } from '../../lib/routes'
+import { getAllIdeasRoute } from '../../lib/routes'
 
-export const SignUpPage = () => {
-  const navigate = useNavigate()
+export const LoginPage = () => {
   const trpcUtils = trpc.useUtils()
+  const navigate = useNavigate()
   const [submittingError, setSubmittingError] = useState<string | null>(null)
-  const signUp = trpc.signUp.useMutation()
+  const login = trpc.login.useMutation()
   const formik = useFormik({
     initialValues: {
       nick: '',
       password: '',
-      confirmPassword: '',
     },
-    validate: withZodSchema(
-      zSignUpTrpcInput.extend({ confirmPassword: z.string().min(1) }).superRefine((data, ctx) => {
-        if (data.password !== data.confirmPassword) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Passwords do not match',
-            path: ['confirmPassword'],
-          })
-        }
-      }),
-    ),
+    validate: withZodSchema(zLoginTrpcInput),
     onSubmit: async (values) => {
       try {
         setSubmittingError
-        const { token } = await signUp.mutateAsync(values)
+        const { token } = await login.mutateAsync(values)
         Cookies.set('token', token, { expires: 7 }) // Store token in cookies for 7 days
         trpcUtils.invalidate()
-        navigate(getLoginRoute())
+        navigate(getAllIdeasRoute())
       } catch (error: any) {
         setSubmittingError(error.message)
         setTimeout(() => {
@@ -53,7 +41,7 @@ export const SignUpPage = () => {
   })
 
   return (
-    <Segment title="Sign Up">
+    <Segment title="Log In">
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -63,10 +51,9 @@ export const SignUpPage = () => {
         <FormItems>
           <Input name="nick" label="Nick" formik={formik} />
           <Input name="password" label="Password" type="password" formik={formik} />
-          <Input name="confirmPassword" label="Confirm Password" type="password" formik={formik} />
           {!formik.isValid && !!formik.submitCount && <Alert color="red">Some fields are invalid</Alert>}
           {submittingError && <Alert color="red">{submittingError}</Alert>}
-          <Button>Sign Up</Button>
+          <Button>Log In</Button>
         </FormItems>
       </form>
     </Segment>

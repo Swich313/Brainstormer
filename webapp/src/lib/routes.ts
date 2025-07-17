@@ -12,3 +12,4 @@ export const getNewIdeaRoute = () => '/ideas/new'
 
 export const getSignupRoute = () => '/signup'
 export const getLoginRoute = () => '/login'
+export const getLogoutRoute = () => '/logout'

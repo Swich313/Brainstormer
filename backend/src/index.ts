@@ -4,6 +4,7 @@ import express from 'express'
 import { type AppContext, createAppContext } from './lib/ctx'
 import { applyTrpcToExpressApp } from './lib/trpc'
 import { trpcRouter } from './router'
+import { applyPassportToExpressApp } from './lib/passport'
 
 const corsOption = {
   origin: '*',
@@ -21,7 +22,7 @@ void (async () => {
     app.get('/ping', (req, res) => {
       res.json('pong')
     })
-
+    applyPassportToExpressApp(app, ctx)
     await applyTrpcToExpressApp(app, ctx, trpcRouter)
 
     app.listen(port, () => {
