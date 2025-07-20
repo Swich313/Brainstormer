@@ -3,6 +3,7 @@ extends:
   - prettier
 plugins:
   - import
+  - node
 parserOptions:
   sourceType: module
 ignorePatterns:
@@ -47,3 +48,8 @@ rules:
         - info
         - error
         - warn
+  node/no-process-env: error
+  no-restricted-syntax:
+    - error
+    - selector: '[object.type=MetaProperty][property.name=env]'
+      message: Use instead import { env } from "lib/env"

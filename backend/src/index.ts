@@ -2,9 +2,10 @@ import cors from 'cors'
 import express from 'express'
 
 import { type AppContext, createAppContext } from './lib/ctx'
+import { applyPassportToExpressApp } from './lib/passport'
 import { applyTrpcToExpressApp } from './lib/trpc'
 import { trpcRouter } from './router'
-import { applyPassportToExpressApp } from './lib/passport'
+import { env } from './lib/env'
 
 const corsOption = {
   origin: '*',
@@ -25,8 +26,8 @@ void (async () => {
     applyPassportToExpressApp(app, ctx)
     await applyTrpcToExpressApp(app, ctx, trpcRouter)
 
-    app.listen(port, () => {
-      console.info(`Example app listening on port http://localhost:${port}`)
+    app.listen(env.PORT, () => {
+      console.info(`Example app listening on port http://localhost:${env.PORT}`)
     })
   } catch (error) {
     console.error(error)
