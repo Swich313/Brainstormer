@@ -10,6 +10,7 @@ import { LoginPage } from './pages/LoginPage'
 import { LogoutPage } from './pages/LogoutPage'
 
 import './styles/global.scss'
+import { EditIdeaPage } from './pages/EditIdeaPage'
 
 export const App = () => {
   return (
@@ -23,6 +24,7 @@ export const App = () => {
             <Route path={routes.getLoginRoute()} element={<LoginPage />} />
             <Route path={routes.getAllIdeasRoute()} element={<AllIdeasPage />} />
             <Route path={routes.getViewIdeaRoute(routes.viewIdeaRouteParams)} element={<ViewIdeaPage />} />
+            <Route path={routes.getEditIdeaRoute(routes.editIdeaRouteParams)} element={<EditIdeaPage />} />
             <Route path={routes.getNewIdeaRoute()} element={<NewIdeaPage />} />
           </Route>
         </Routes>

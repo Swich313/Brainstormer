@@ -15,8 +15,15 @@ export const createIdeaTrpcRoute = trpc.procedure
       throw Error('Idea with this nick already exists!')
     }
 
+    if (!ctx.me) {
+      throw Error('UNAUTHORIZED')
+    }
+
     await ctx.prisma.idea.create({
-      data: input,
+      data: {
+        ...input,
+        authorId: ctx.me.id,
+      },
     })
 
     return true
