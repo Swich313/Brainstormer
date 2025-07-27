@@ -1,7 +1,4 @@
-import { useState } from 'react'
 import { trpc } from '../../lib/trpc'
-import { useFormik } from 'formik'
-import { withZodSchema } from 'formik-validator-zod'
 import { zLoginTrpcInput } from '@brainstormer/backend/src/router/login/input'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router'
@@ -12,32 +9,25 @@ import { Input } from '../../components/Input'
 import { FormItems } from '../../components/FormItems'
 import { Button } from '../../components/Button'
 import { getAllIdeasRoute } from '../../lib/routes'
+import { useForm } from '../../lib/form'
 
 export const LoginPage = () => {
   const trpcUtils = trpc.useUtils()
   const navigate = useNavigate()
-  const [submittingError, setSubmittingError] = useState<string | null>(null)
   const login = trpc.login.useMutation()
-  const formik = useFormik({
+  const { formik, buttonProps, alertProps } = useForm({
     initialValues: {
       nick: '',
       password: '',
     },
-    validate: withZodSchema(zLoginTrpcInput),
+    validationSchema: zLoginTrpcInput,
     onSubmit: async (values) => {
-      try {
-        setSubmittingError
-        const { token } = await login.mutateAsync(values)
-        Cookies.set('token', token, { expires: 7 }) // Store token in cookies for 7 days
-        trpcUtils.invalidate()
-        navigate(getAllIdeasRoute())
-      } catch (error: any) {
-        setSubmittingError(error.message)
-        setTimeout(() => {
-          setSubmittingError(null)
-        }, 3000)
-      }
+      const { token } = await login.mutateAsync(values)
+      Cookies.set('token', token, { expires: 7 }) // Store token in cookies for 7 days
+      trpcUtils.invalidate()
+      navigate(getAllIdeasRoute())
     },
+    resetOnSuccess: false,
   })
 
   return (
@@ -51,9 +41,8 @@ export const LoginPage = () => {
         <FormItems>
           <Input name="nick" label="Nick" formik={formik} />
           <Input name="password" label="Password" type="password" formik={formik} />
-          {!formik.isValid && !!formik.submitCount && <Alert color="red">Some fields are invalid</Alert>}
-          {submittingError && <Alert color="red">{submittingError}</Alert>}
-          <Button>Log In</Button>
+          <Alert {...alertProps} />
+          <Button {...buttonProps}>Log In</Button>
         </FormItems>
       </form>
     </Segment>
