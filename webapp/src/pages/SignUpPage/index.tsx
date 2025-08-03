@@ -2,18 +2,18 @@ import { trpc } from '../../lib/trpc'
 import { zSignUpTrpcInput } from '@brainstormer/backend/src/router/signUp/input'
 import { z } from 'zod'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router'
 
 import { Alert } from '../../components/Alert'
 import { Segment } from '../../components/Segment'
 import { Input } from '../../components/Input'
 import { FormItems } from '../../components/FormItems'
 import { Button } from '../../components/Button'
-import { getLoginRoute } from '../../lib/routes'
 import { useForm } from '../../lib/form'
+import { withPageWrapper } from '../../lib/pageWrapper'
 
-export const SignUpPage = () => {
-  const navigate = useNavigate()
+export const SignUpPage = withPageWrapper({
+  redirectAuthorized: true,
+})(() => {
   const trpcUtils = trpc.useUtils()
   const signUp = trpc.signUp.useMutation()
   const { formik, alertProps, buttonProps } = useForm({
@@ -35,7 +35,6 @@ export const SignUpPage = () => {
       const { token } = await signUp.mutateAsync(values)
       Cookies.set('token', token, { expires: 7 }) // Store token in cookies for 7 days
       trpcUtils.invalidate()
-      navigate(getLoginRoute())
     },
     resetOnSuccess: false,
   })
@@ -58,4 +57,4 @@ export const SignUpPage = () => {
       </form>
     </Segment>
   )
-}
+})

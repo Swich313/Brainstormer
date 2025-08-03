@@ -1,11 +1,11 @@
 import { Link, Outlet } from 'react-router'
-import { trpc } from '../../lib/trpc'
 import * as routes from '../../lib/routes'
+import { useMe } from '../../lib/ctx'
 
 import styles from './index.module.scss'
 
 export const Layout = () => {
-  const { data, isLoading, isFetching, isError } = trpc.getMe.useQuery()
+  const me = useMe()
 
   return (
     <div className={styles.layout}>
@@ -17,7 +17,7 @@ export const Layout = () => {
               All Ideas
             </Link>
           </li>
-          {isLoading || isFetching || isError ? null : data && data.me ? (
+          {!!me ? (
             <>
               <li className={styles.menuItem}>
                 <Link className={styles.link} to={routes.getNewIdeaRoute()}>
@@ -26,7 +26,7 @@ export const Layout = () => {
               </li>
               <li className={styles.menuItem}>
                 <Link className={styles.link} to={routes.getLogoutRoute()}>
-                  Log out ({data.me.nick})
+                  Log out ({me.nick})
                 </Link>
               </li>
             </>

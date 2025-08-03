@@ -11,24 +11,27 @@ import { LogoutPage } from './pages/LogoutPage'
 
 import './styles/global.scss'
 import { EditIdeaPage } from './pages/EditIdeaPage'
+import { AppContextProvider } from './lib/ctx'
 
 export const App = () => {
   return (
     <TrpcProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path={routes.getLogoutRoute()} element={<LogoutPage />} />
+      <AppContextProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path={routes.getLogoutRoute()} element={<LogoutPage />} />
 
-          <Route element={<Layout />}>
-            <Route path={routes.getSignupRoute()} element={<SignUpPage />} />
-            <Route path={routes.getLoginRoute()} element={<LoginPage />} />
-            <Route path={routes.getAllIdeasRoute()} element={<AllIdeasPage />} />
-            <Route path={routes.getViewIdeaRoute(routes.viewIdeaRouteParams)} element={<ViewIdeaPage />} />
-            <Route path={routes.getEditIdeaRoute(routes.editIdeaRouteParams)} element={<EditIdeaPage />} />
-            <Route path={routes.getNewIdeaRoute()} element={<NewIdeaPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            <Route element={<Layout />}>
+              <Route path={routes.getSignupRoute()} element={<SignUpPage />} />
+              <Route path={routes.getLoginRoute()} element={<LoginPage />} />
+              <Route path={routes.getAllIdeasRoute()} element={<AllIdeasPage />} />
+              <Route path={routes.getViewIdeaRoute(routes.viewIdeaRouteParams)} element={<ViewIdeaPage />} />
+              <Route path={routes.getEditIdeaRoute(routes.editIdeaRouteParams)} element={<EditIdeaPage />} />
+              <Route path={routes.getNewIdeaRoute()} element={<NewIdeaPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AppContextProvider>
     </TrpcProvider>
   )
 }
