@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 import { useEffect } from 'react'
 import { getAllIdeasRoute } from './routes'
 import { ErrorPageComponent } from '../components/ErrorPageComponent'
+import { NotFoundPage } from '../pages/other/NotFoundPage'
 
 class CheckExistsError extends Error {}
 const checkExistsFn = <T,>(value: T, message?: string): NonNullable<T> => {
@@ -66,8 +67,8 @@ const PageWrapper = <TProps extends Props = {}, TQueryResult extends QueryResult
   checkAccessTitle = 'Access Denied',
   checkAccessMessage = 'You do not have permission to access this page!',
   checkExists,
-  checkExistsTitle = 'Not Found',
-  checkExistsMessage = 'This page does not exist!',
+  checkExistsTitle,
+  checkExistsMessage,
   useQuery,
   setProps,
   Page,
@@ -101,14 +102,14 @@ const PageWrapper = <TProps extends Props = {}, TQueryResult extends QueryResult
   if (checkAccess) {
     const accessDenied = !checkAccess(helperProps)
     if (accessDenied) {
-      return <ErrorPageComponent title={checkAccessTitle} message={checkAccessMessage} />
+      return <NotFoundPage title={checkAccessTitle} message={checkAccessMessage} />
     }
   }
 
   if (checkExists) {
     const notExists = !checkExists(helperProps)
     if (notExists) {
-      return <ErrorPageComponent title={checkExistsTitle} message={checkExistsMessage} />
+      return <NotFoundPage title={checkExistsTitle} message={checkExistsMessage} />
     }
   }
 
@@ -117,11 +118,11 @@ const PageWrapper = <TProps extends Props = {}, TQueryResult extends QueryResult
     return <Page {...props} />
   } catch (error) {
     if (error instanceof CheckExistsError) {
-      return <ErrorPageComponent title={checkExistsTitle} message={error.message || checkExistsMessage} />
+      return <NotFoundPage title={checkExistsTitle} message={error.message || checkExistsMessage} />
     }
 
     if (error instanceof CheckAccessError) {
-      return <ErrorPageComponent title={checkAccessTitle} message={error.message || checkAccessMessage} />
+      return <NotFoundPage title={checkAccessTitle} message={error.message || checkAccessMessage} />
     }
     throw error
   }
