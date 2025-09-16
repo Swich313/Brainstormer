@@ -25,6 +25,11 @@ export const Layout = () => {
                 </Link>
               </li>
               <li className={styles.menuItem}>
+                <Link className={styles.link} to={routes.editProfileRoute()}>
+                  Edit Profile
+                </Link>
+              </li>
+              <li className={styles.menuItem}>
                 <Link className={styles.link} to={routes.getLogoutRoute()}>
                   Log out ({me.nick})
                 </Link>

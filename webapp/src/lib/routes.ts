@@ -14,6 +14,8 @@ export const getEditIdeaRoute = ({ nick }: EditIdeaRouteParams) => `/ideas/${nic
 
 export const getNewIdeaRoute = () => '/ideas/new'
 
+export const editProfileRoute = () => '/edit-profile'
+
 export const getSignupRoute = () => '/signup'
 export const getLoginRoute = () => '/login'
 export const getLogoutRoute = () => '/logout'
